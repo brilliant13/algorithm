@@ -6,6 +6,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         //입력 N, X
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int X = Integer.parseInt(st.nextToken());
@@ -16,11 +18,17 @@ public class Main {
             arr[i] = Integer.parseInt(st2.nextToken());
         }
         //X 탐색
-        for (int j = 0; j < arr.length; j++) {
-            if (arr[j] < X) {
-                System.out.print(arr[j]+" ");
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < X) {
+                bw.write(arr[i] + " ");
             }
         }
+        br.close();
+        bw.flush();
+        bw.close();
+
 
     }
 }
+
+
