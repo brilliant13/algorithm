@@ -4,17 +4,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int T = Integer.parseInt(br.readLine());
-        String str = "";
-        for (int i = 0; i < T; i++) {
-            str = br.readLine();
-            bw.write(str.charAt(0)+"" + str.charAt(str.length() - 1) + "\n");
-
+        int n = Integer.parseInt(br.readLine());
+        String name[] = new String[n];
+        for (int i = 0; i < n; i++) {
+            String str = br.readLine();
+            name[i] = str.substring(0, 1) + str.substring(str.length() - 1, str.length());
         }
         br.close();
-        bw.flush();
-        bw.close();
+        for (int i = 0; i < n; i++) {
+            System.out.println(name[i]);
+        }
     }
 }
 
