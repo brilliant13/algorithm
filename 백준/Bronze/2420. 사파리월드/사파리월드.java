@@ -1,15 +1,16 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.StringTokenizer;
 
 public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-    public static void main(String[] args) {
+        //  int → long 변경하여 오버플로우 방지
+        long X = Long.parseLong(st.nextToken());
+        long Y = Long.parseLong(st.nextToken());
 
-        Scanner sc = new Scanner(System.in);
-
-        long X = sc.nextLong();
-        long Y = sc.nextLong();
-        long abs = Math.abs(X - Y);
-        System.out.println(abs);
-
+        //  long 타입으로 절댓값 계산 후 출력
+        System.out.println(Math.abs(X - Y));
     }
 }
