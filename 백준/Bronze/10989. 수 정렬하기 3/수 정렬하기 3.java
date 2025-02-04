@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -10,19 +9,17 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         int N = Integer.parseInt(br.readLine());
-
-        int arr[] = new int[N];
-
+        int[] cnt = new int[10001]; //0~10000. 0은 사실 안 씀.
         for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+            cnt[Integer.parseInt(br.readLine())]++;
         }
-
-        Arrays.sort(arr);
-
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]).append("\n");
+        br.close();
+        for (int i = 1; i < 10001; i++) {
+            while (cnt[i] > 0) {
+                sb.append(i).append('\n');
+                cnt[i]--;
+            }
         }
         System.out.println(sb);
-
     }
 }
