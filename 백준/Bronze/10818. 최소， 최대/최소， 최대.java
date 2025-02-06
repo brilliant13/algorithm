@@ -12,14 +12,20 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int arr[] = new int[N];
-        int i = 0;
+
+        int max = -1000001;
+        int min = 1000001;
+
         while (st.hasMoreTokens()) {
-            arr[i]=Integer.parseInt(st.nextToken());
-            i++;
+            int val = Integer.parseInt(st.nextToken());
+            if (val > max) {
+                max = val;
+            }
+            if (val < min) {
+                min = val;
+            }
         }
-        Arrays.sort(arr);
-        System.out.println(arr[0] + " " + arr[N - 1]);
+        System.out.println(min + " " + max);
 
     }
 }
