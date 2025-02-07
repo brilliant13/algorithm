@@ -11,7 +11,7 @@ public class Main {
             if (input.equals("0")) {
                 break;
             }
-            bw.write(check(input));
+            bw.write(check(input)+"\n");
         }
         br.close();
         bw.flush();
@@ -24,13 +24,13 @@ public class Main {
 
         if (length % 2 == 0) {
             for (int i = 0; i < half; i++) {
-                if (s.charAt(i) != s.charAt(length - 1 - i)) return "no\n";
+                if (s.charAt(i) != s.charAt(length - 1 - i)) return "no";
             }
         } else {
             for (int j = 0; j < half + 1; j++) {
-                if (s.charAt(j) != s.charAt(length - 1 - j)) return "no\n";
+                if (s.charAt(j) != s.charAt(length - 1 - j)) return "no";
             }
         }
-        return "yes\n";
+        return "yes";
     }
 }
