@@ -17,12 +17,7 @@ public class Main {
     static int gcd(int a, int b) {
         //greatest common divisor 최대공약수
         if(b==0) return a;
-        while (b != 0) {
-            int r = a%b;
-            a =b;
-            b = r;
-        }
-        return a;
+        return gcd(b, a % b);
     }
 
     static int lcm(int a, int b) {
