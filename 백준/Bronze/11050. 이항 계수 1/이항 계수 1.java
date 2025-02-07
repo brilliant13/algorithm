@@ -3,25 +3,26 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+    static int[][]dp;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
         int r = Integer.parseInt(st.nextToken());
-        System.out.println(binomial(n, r));
-    }
+        dp = new int[n+1][r+1];
 
-    static int binomial(int n, int r) {
-        //nCr = nPr / r!
-        return factorial(n) / (factorial(r) * factorial(n - r));
+        System.out.println(BC(n, r));
+
 
     }
 
-    static int factorial(int n) {
-        int fac = 1;
-        for (int i = 1; i <= n; i++) {
-            fac *= i;
+    static int BC(int n, int r) {
+        if(dp[n][r]>0) return dp[n][r];
+        if (n == r || r == 0) {
+           return dp[n][r] = 1;
+        } else {
+            return dp[n][r] = BC(n - 1, r - 1) + BC(n - 1, r);
         }
-        return fac;
     }
 }
