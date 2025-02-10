@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.StringTokenizer;
@@ -8,28 +6,46 @@ import java.util.StringTokenizer;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
         int T = Integer.parseInt(br.readLine());
-        String[][] arr = new String[T][2];
+
+        Person[] p = new Person[T];
 
         for (int i = 0; i < T; i++) {
-            st = new StringTokenizer(br.readLine());
-            arr[i][0]=st.nextToken();
-            arr[i][1]=st.nextToken();
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int age = Integer.parseInt(st.nextToken());
+            String name = st.nextToken();
+            p[i] = new Person(age, name);
         }
 
-        //나이순 정렬
-        Arrays.sort(arr, new Comparator<String[]>(){
-            public int compare(String[] s1, String[] s2) {
-                return Integer.parseInt(s1[0]) - Integer.parseInt(s2[0]);
+        //Arrays.sort는 Stable sort. 입력순서는 유지된다.
+        Arrays.sort(p, new Comparator<Person>() {
+            @Override
+            public int compare(Person s1, Person s2) {
+                return s1.age - s2.age;
             }
         });
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < T; i++) {
-            sb.append(arr[i][0] + " " + arr[i][1]).append('\n');
+            sb.append(p[i]);
         }
         System.out.println(sb);
+
+    }
+
+    private static class Person {
+        int age;
+        String name;
+
+        public Person(int age, String name) {
+            this.age = age;
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return age + " " + name + "\n";
+        }
 
     }
 }
