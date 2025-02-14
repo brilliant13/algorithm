@@ -8,26 +8,20 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
-        int A,B,C;
-        int arr[] = new int[10];
 
-        A = Integer.parseInt(br.readLine());
-        B = Integer.parseInt(br.readLine());
-        C = Integer.parseInt(br.readLine());
+        int[] arr = new int[10];
 
-        String ABC = String.valueOf(A * B * C);
-        for (int i = 0; i < ABC.length(); i++) {
-            arr[Integer.parseInt(String.valueOf(ABC.charAt(i)))]++;
+        int val = Integer.parseInt(br.readLine()) * Integer.parseInt(br.readLine()) * Integer.parseInt(br.readLine());
+        String str = String.valueOf(val);
+        for (int i = 0; i < str.length(); i++) {
+            arr[(str.charAt(i)-48)]++;
         }
-        for (int i = 0; i < 10; i++) {
-            sb.append(arr[i] + "\n");
+        for (int v : arr) {
+            System.out.println(v);
         }
-        System.out.println(sb);
+        }
     }
 
 
-}
 
 
