@@ -8,35 +8,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        int[] arr = new int[8];
-        for (int i = 0; i < 8; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
-
-        if (arr[0] < arr[1]) {
-            for (int i = 1; i < 7; i++) {
-                if (arr[i] == arr[i + 1] || arr[i] > arr[i + 1]) {
-                    System.out.println("mixed");
-                    break;
-                }
-                if(i==6) System.out.println("ascending");
-            }
-
-        }
-        if (arr[0] > arr[1]) {
-            for (int i = 1; i < 7; i++) {
-                if (arr[i] == arr[i + 1] || arr[i] < arr[i + 1]) {
-                    System.out.println("mixed");
-                    break;
-                }
-
-                if(i==6) System.out.println("descending");
-            }
-        }
-
-
+        int v = Integer.parseInt(br.readLine().replace(" ", ""));
+        System.out.println(v == 12345678 ? "ascending" : v == 87654321 ? "descending" : "mixed");
+        br.close();
     }
 }
 
