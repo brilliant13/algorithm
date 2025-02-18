@@ -22,10 +22,12 @@ public class Main {
         long power = 1;
         long result =0;
         for (int i = 0; i < chars.length; i++) {
-            result += (chars[i]-'a'+1)*power;
-            power*=r;
+//            result += ((chars[i]-'a'+1)%M)*(power%M);
+//            power*=r;
+            result = (result + (chars[i]-'a'+1) * power) % M;
+            power = (power * r) % M;
         }
-        return result%M;
+        return result;
     }
 
 }
