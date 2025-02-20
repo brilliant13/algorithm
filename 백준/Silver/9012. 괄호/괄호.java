@@ -1,48 +1,54 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 public class Main {
-
-    char [] chars;
     public static void main(String[] args) throws IOException {
-
-        //() VPS
-        //( VPS ) = VPS
-        // VPS+VPS = VPS
-        //  (  ())(   )  ((()))
-        // 왼쪽 bracket과 오른쪽 bracket의 개수가 같아야 함.
-        // 처음은 무조건 ( 이어야하고 그것이 아니면 No
-        // (count와 )count가 같아야 함.  )count가 (count보다 크면 No
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < T; i++) {
-            String vps = is_VPS(br.readLine());
-            sb.append(vps).append('\n');
+
+        int T = Integer.parseInt(br.readLine());
+
+        while (T-- > 0) {
+            sb.append(solve(br.readLine())).append('\n');
         }
         System.out.println(sb);
+
     }
 
-    public static String is_VPS (String chars) {
-        //String을 char배열로 넣는다.
-        int left_count =1;
-        int right_count=0;
-        if (chars.charAt(0) == ')') {
-            return "NO";
-        } else {
-            for (int i = 1; i < chars.length(); i++) {
-                if (chars.charAt(i) == '(') {
-                    left_count++;
-                } else {
-                    right_count++;
-                }
-                if(right_count > left_count){
-                    return "NO";
-                }
+    public static String solve(String s) {
+
+        int count = 0;
+
+        for (char c : s.toCharArray()) {
+
+            // 여는 괄호일 경우 카운트 증가
+            if (c == '(') {
+                count++;
             }
-            return (left_count == right_count) ? "YES" : "NO";
+
+            // 아래는 모두 닫는 괄호 일 경우들이다.
+
+            // count 가 0인 경우. 즉, 닫는 괄호를 입력받았으나 pop할 원소가 없을 경우
+            else if (count == 0) {
+                return "NO";
+            }
+            // 그 외의 경우 count를 감소시킨다.
+            else {
+                count--;
+            }
+        }
+
+        /*
+         * 모든 검사 마치고 잔여 요소가 있으면(count > 0) 여는 괄호가 많은 경우는 "NO"
+         * 요소가 비어있으면(count = 0) 온전한 수식이므로 "YES" 이다.
+         */
+
+        if (count == 0) {
+            return "YES";
+        }
+        else {
+            return "NO";
         }
     }
 }
