@@ -1,62 +1,79 @@
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
+import java.util.StringTokenizer;
 
 public class Main {
 
     public static int[] stack;
     public static int size = 0;
 
-    public static void main(String[] args) throws IOException {
-        Scanner in = new Scanner(System.in);
-        StringBuilder sb = new StringBuilder();
 
-        int N = in.nextInt();
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        StringTokenizer st;
+
+        int N = Integer.parseInt(br.readLine());
 
         stack = new int[N];
 
-        for (int i = 0; i < N; i++) {
-            String str = in.next();
+        while (N-- > 0) {
+            st = new StringTokenizer(br.readLine(), " ");
 
-            switch(str) {
+            switch (st.nextToken()) {
+
                 case "push":
-                    push(in.nextInt());
+                    push(Integer.parseInt(st.nextToken()));
                     break;
+
                 case "pop":
-                    sb.append(pop()).append('\n');
+                    bw.write(pop() + "\n");
                     break;
+
                 case "size":
-                    sb.append(size()).append('\n');
+                    bw.write(size()+"\n");
                     break;
+
                 case "empty":
-                    sb.append(empty()).append('\n');
+                    bw.write(String.valueOf(empty()));
+                    bw.append('\n');
                     break;
+
                 case "top":
-                    sb.append(top()).append('\n');
+                    bw.write(String.valueOf(top()));
+                    bw.append('\n');
                     break;
             }
 
         }
-        System.out.println(sb);
+        br.close();
+        bw.flush();
+        bw.close();
     }
 
     public static void push(int item) {
-        stack[size]=item;
+        stack[size] = item;
         size++;
     }
 
     public static int pop() {
-        if (size == 0) {
+        if(size == 0) {
             return -1;
-        } else {
+        }
+        else {
             int res = stack[size - 1];
-            stack[size-1]=0;
+            stack[size - 1] = 0;
             size--;
             return res;
         }
     }
+
     public static int size() {
         return size;
     }
+
     public static int empty() {
         if(size == 0) {
             return 1;
@@ -65,11 +82,13 @@ public class Main {
             return 0;
         }
     }
+
     public static int top() {
-        if (size == 0) {
+        if(size == 0) {
             return -1;
-        } else {
-            return stack[size-1];
+        }
+        else {
+            return stack[size - 1];
         }
     }
 
