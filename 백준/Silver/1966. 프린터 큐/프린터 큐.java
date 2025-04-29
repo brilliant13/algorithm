@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int testCases = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         for (int t = 0; t < testCases; t++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -40,13 +41,15 @@ public class Main {
                     //현재 문서가 가장 높은 중요도라면 인쇄
                     count++;
                     if (current[1] == M) {
-                        System.out.println(count);
+//                        System.out.println(count);
+                        sb.append(count).append('\n');
                         break;
                     }
                 }
             }
         }
-        
+        System.out.println(sb);
+
     }
 }
 
