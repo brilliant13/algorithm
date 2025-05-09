@@ -15,14 +15,21 @@ public class Main {
         }
         Arrays.sort(array);
 
-        // 1 2 3 3 4
-        // 1 + (1+2) + (1+2+3) + (1+2+3+3) + (1+2+3+3+4)
-        int sum =0;
-        for (int k = 0; k < array.length; k++) {
-            for (int j = 0; j <= k; j++) {
-                sum += array[j];
-            }
+//        int sum =0;
+//        for (int k = 0; k < array.length; k++) {
+//            for (int j = 0; j <= k; j++) {
+//                sum += array[j];
+//            }
+//        }
+        //시간복잡도를 개선해보자.  O(N²)에서 O(N log N)으로 개선
+        int totalWaitTime =0;
+        int cumulativeTime =0;
+
+        for (int time : array) {
+            cumulativeTime += time; // 현재 사람이 기다린 시간 + 인출 시간
+            totalWaitTime += cumulativeTime; //총 대기시간에 누적
         }
-        System.out.println(sum);
+
+        System.out.println(totalWaitTime);
     }
 }
