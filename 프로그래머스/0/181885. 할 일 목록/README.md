@@ -1,10 +1,10 @@
 # [level 0] 할 일 목록 - 181885 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181885) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181885?language=java) 
 
 ### 성능 요약
 
-메모리: 73.3 MB, 시간: 9.73 ms
+메모리: 95.7 MB, 시간: 11.91 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 06월 28일 21:19:10
+2025년 06월 28일 21:24:29
 
 ### 문제 설명
 
