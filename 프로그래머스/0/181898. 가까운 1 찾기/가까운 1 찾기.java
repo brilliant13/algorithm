@@ -1,8 +1,10 @@
+import java.util.stream.IntStream;
+
 class Solution {
     public int solution(int[] arr, int idx) {
-        for(int i=idx; i<arr.length; i++){
-            if(arr[i]==1) return i;
-        }
-        return -1;
+
+        return IntStream.range(idx,arr.length).filter(i->arr[i]==1)
+                                         .findFirst()
+                                         .orElse(-1);
     }
 }
