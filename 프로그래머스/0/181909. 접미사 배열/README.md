@@ -1,10 +1,10 @@
 # [level 0] 접미사 배열 - 181909 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181909) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181909?language=java) 
 
 ### 성능 요약
 
-메모리: 87.8 MB, 시간: 2.22 ms
+메모리: 89.7 MB, 시간: 5.05 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 07월 02일 13:34:47
+2025년 07월 02일 13:52:23
 
 ### 문제 설명
 
