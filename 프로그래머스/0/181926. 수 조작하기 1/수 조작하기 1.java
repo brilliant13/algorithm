@@ -1,17 +1,8 @@
 class Solution {
     public int solution(int n, String control) {
         
-        char index = ' ';
-        for(int i=0; i<control.length();i++){
-            index = control.charAt(i);
-            switch(index){
-                case 'w' : n++; break;
-                case 's': n--; break;
-                case 'd' : n+=10; break;
-                case 'a' : n-=10; break;
-            }
-        }
-        
-        return n;
+        return control.chars().reduce(n, (acc, c) -> acc + (c =='w' ? 1 : c == 's' ? -1 : c == 'd' ? 10 : -10));
+            
+        //String -> IntStream(ASCII코드값)
     }
 }
