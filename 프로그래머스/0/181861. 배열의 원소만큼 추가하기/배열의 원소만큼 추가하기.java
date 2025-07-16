@@ -11,11 +11,8 @@ class Solution {
             }
         }
         // list -> int[]
-        // return list.toArray();
-        int [] result = new int [list.size()];
-        for(int i=0; i<list.size(); i++){
-            result[i] = list.get(i);
-        }
+int[] result = list.stream()
+                        .mapToInt(Integer::intValue).toArray();
         return result;
     }
 }
