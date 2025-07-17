@@ -1,10 +1,10 @@
 # [level 0] 배열에서 문자열 대소문자 변환하기 - 181875 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181875) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181875?language=java) 
 
 ### 성능 요약
 
-메모리: 80.8 MB, 시간: 0.06 ms
+메모리: 80.2 MB, 시간: 4.46 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 07월 17일 14:02:56
+2025년 07월 17일 14:10:55
 
 ### 문제 설명
 
