@@ -1,10 +1,10 @@
 # [level 0] 글자 지우기 - 181900 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181900) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181900?language=java) 
 
 ### 성능 요약
 
-메모리: 88.3 MB, 시간: 0.58 ms
+메모리: 74.1 MB, 시간: 2.26 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 07월 22일 17:42:08
+2025년 07월 22일 17:50:08
 
 ### 문제 설명
 
