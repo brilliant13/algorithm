@@ -13,7 +13,8 @@ class Solution {
         }
         //int[]에서 최댓값 찾는 법 
         //int[] -> Stream<Integer> ->
-        // return Arrays.stream(groupCount).mapToInt(Integer::intValue).max().getAsInt;
-        return Arrays.stream(groupCount).max().orElse(-1);
+        // return Arrays.stream(groupCount).mapToInt(Integer::intValue).max().getAsInt();
+        return Arrays.stream(groupCount).max().getAsInt();
+        // return Arrays.stream(groupCount).max().orElse(-1);
     }
 }
