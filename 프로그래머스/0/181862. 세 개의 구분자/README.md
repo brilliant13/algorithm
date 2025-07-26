@@ -1,10 +1,10 @@
 # [level 0] 세 개의 구분자 - 181862 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181862) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181862?language=java) 
 
 ### 성능 요약
 
-메모리: 130 MB, 시간: 96.31 ms
+메모리: 95.1 MB, 시간: 53.10 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 07월 26일 15:29:17
+2025년 07월 26일 15:35:43
 
 ### 문제 설명
 
