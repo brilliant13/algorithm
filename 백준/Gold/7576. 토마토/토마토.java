@@ -51,8 +51,6 @@ public class Main {
     }
 
     static int day_bfs() {
-        if (queue.isEmpty()) return -1;
-
         while (!queue.isEmpty()) {
             int size = queue.size();
             boolean anyRipened = false;
