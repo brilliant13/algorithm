@@ -10,20 +10,11 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
-        int [] arr = new int [N+1]; //1~N
-        int i = 1;
+        //입력 수열 읽으면서 바로 prefix_sum 계산
+        long[] prefix = new long[N + 1];
         st = new StringTokenizer(br.readLine());
-        while (st.hasMoreTokens()) {
-            arr[i++] = Integer.parseInt(st.nextToken());
-        }
-        //arr[1] ~ arr[N] 구성끝
-
-        //구간합 구성
-        int[] interval_sum = new int[N+1]; // 1~N
-        int sum = 0;
-        for (int k = 1; k <= N; k++) {
-            sum += arr[k];
-            interval_sum[k] = sum;
+        for (int i = 1; i <= N; i++) {
+            prefix[i] = prefix[i - 1] + Integer.parseInt(st.nextToken());
         }
 
         StringBuilder sb = new StringBuilder();
@@ -31,7 +22,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
-            sb.append(interval_sum[end] - interval_sum[start - 1]).append('\n');
+            sb.append(prefix[end] - prefix[start - 1]).append('\n');
         }
         System.out.print(sb);
 
