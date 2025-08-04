@@ -4,18 +4,17 @@ import java.util.HashMap;
 class Solution {
     public String solution(String[] participant, String[] completion) {
         Map<String,Integer> map = new HashMap<>();
-        for(int i=0; i<participant.length; i++){
-            map.put(participant[i], map.getOrDefault(participant[i],0)+1);
+        for(String p : participant){
+            map.put(p,map.getOrDefault(p,0)+1);
         }
-        for(int i=0; i<completion.length; i++){
-            map.put(completion[i], map.get(completion[i])-1);
-            map.remove(completion[i],0);
+        for(String c : completion){
+            int v = map.get(c) -1;
+            if(v==0){
+                map.remove(c);
+            } else {
+                map.put(c,v);
+            }
         }
-         String answer = "";
-        for(Map.Entry<String,Integer> entry : map.entrySet()){
-            answer = entry.getKey();
-        }
-       
-        return answer;
+        return map.keySet().iterator().next();
     }
 }
