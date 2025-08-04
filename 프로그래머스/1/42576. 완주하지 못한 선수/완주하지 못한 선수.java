@@ -1,20 +1,26 @@
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        Map<String,Integer> map = new HashMap<>();
-        for(String p : participant){
-            map.put(p,map.getOrDefault(p,0)+1);
-        }
-        for(String c : completion){
-            int v = map.get(c) -1;
-            if(v==0){
-                map.remove(c);
+
+        Map<String, Long> participantMap = Arrays.asList(participant).stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        for(String name : completion) {
+
+            Long value = participantMap.get(name) - 1L;
+
+            if(value == 0L) {
+                participantMap.remove(name);
             } else {
-                map.put(c,v);
+                participantMap.put(name, value);
             }
         }
-        return map.keySet().iterator().next();
+
+        return participantMap.keySet().iterator().next();
     }
 }
