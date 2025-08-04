@@ -1,14 +1,17 @@
-import java.util.Arrays;
-
+import java.util.Set;
+import java.util.HashSet;
 class Solution {
     public boolean solution(String[] phone_book) {
-        //사전순으로 정렬하면 비슷한 것들은 비슷한 위치에 나열된다.
-        Arrays.sort(phone_book);
-        for (int i=0; i<phone_book.length-1; i++){
-            if(phone_book[i+1].startsWith(phone_book[i])){
-                return false;
+        Set<String> set = new HashSet<>();
+        for(String num : phone_book){
+            set.add(num);
+        }
+        for(String num : phone_book){
+            for(int len=1; len<num.length();len++){
+                if(set.contains(num.substring(0,len)))
+                    return false;
             }
-        }        
-        return true;
+        }
+    return true;
     }
 }
