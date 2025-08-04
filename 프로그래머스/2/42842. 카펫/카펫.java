@@ -19,9 +19,9 @@ class Solution {
             
             width = x;
             height = y;
+            return new int[]{width,height};
             
         }
-        int[] answer = {width,height};
-        return answer;
+        return new int[]{-1,-1};
     }
 }
