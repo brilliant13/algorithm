@@ -2,29 +2,20 @@ import java.util.*;
 
 public class Solution {
     public int[] solution(int []arr) {
-        Queue <Integer> q = new ArrayDeque<>();
-        List<Integer> list = new ArrayList<>();
-        
-        for(int num : arr){
-            if(q.isEmpty()) {
-                q.offer(num);
+        ArrayList<Integer> tempList = new ArrayList<Integer>();
+        int preNum = 10;
+        for(int num: arr){
+            if(preNum != num){
+                tempList.add(num);
             }
-            else{
-                // System.out.println(q.peek());
-                if(q.peek() != num) {
-                    list.add(q.poll());
-                    q.offer(num);}
-            }
+            preNum = num;
         }
-        list.add(q.poll());
-        // Integer[] temp = q.toArray(new Integer[0]);
+        int[] answer = new int[tempList.size()];
+        for(int i=0; i<answer.length; i++){
+            answer[i] = tempList.get(i).intValue();
+        }
+        return answer;
         
-        //Integer -> Stream<Integer> -> IntStream -> int[]
-        // int[] answer = Arrays.stream(temp).mapToInt(Integer::intValue).toArray();
         
-        //List<Integer> -> int[]
-        // List<Integer> -> Stream<Integer> -> IntStream -> int[]
-        return list.stream().mapToInt(Integer::intValue).toArray();
-
     }
 }
