@@ -1,49 +1,47 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
+    static List<Integer>[] graph;
+    static boolean[] visited;
+    static int[] parent;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
+
         int N = Integer.parseInt(br.readLine());
-        @SuppressWarnings("unchecked")
-        List<Integer>[] adj = new ArrayList[N+1]; //1~N
-        for (int i = 0; i < adj.length; i++) {
-            adj[i] = new ArrayList<>();
+        graph = new ArrayList[N + 1];
+        visited = new boolean[N + 1];
+        parent = new int[N + 1];
+
+        for (int i = 1; i <= N; i++) graph[i] = new ArrayList<>();
+
+        for (int i = 0; i < N - 1; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            graph[a].add(b);
+            graph[b].add(a); // 무방향
         }
-        for (int i = 1; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-            int A = Integer.parseInt(st.nextToken());
-            int B = Integer.parseInt(st.nextToken());
-            adj[A].add(B);
-            adj[B].add(A);
-        }
 
-        Map<Integer, Integer> map = new HashMap<>();
-        boolean[] visited = new boolean[N + 1]; //1~N
+        // 루트는 1번
+        visited[1] = true;
+        dfs(1);
 
-        Queue<Integer> q = new ArrayDeque<>();
-        q.offer(1);
-        visited[1]= true;
-
-
-        //1이 루트. 1부터 bfs하면 이후 것들은 순서대로 child
-        //트리구조는 부모가 하나기 때문이다.
-        while (!q.isEmpty()) {
-            int parent = q.poll();
-            for (int nxt : adj[parent]) {
-                if(visited[nxt]) continue;
-                visited[nxt] = true;
-                map.put(nxt, parent);
-                q.offer(nxt);
-            }
-        }
-        //2번노드부터 부모노드 출력
         for (int i = 2; i <= N; i++) {
-            sb.append(map.get(i)).append((char)10); //아스키코드 10이 Line Feed. LF임
+            sb.append(parent[i]).append('\n');
         }
         System.out.print(sb);
+    }
+
+    static void dfs(int cur) {
+        for (int nxt : graph[cur]) {
+            if (!visited[nxt]) {
+                visited[nxt] = true;
+                parent[nxt] = cur; // 부모 기록
+                dfs(nxt);
+            }
+        }
     }
 }
