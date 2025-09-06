@@ -1,42 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.StringTokenizer;
-
+import java.io.*;
+import java.util.*;
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        final int MAX = 100000;
 
-        int depth = 0;
-        boolean[] visited = new boolean[MAX + 1]; // 1~100000
-        Queue<Integer> q = new ArrayDeque<>();
-        q.offer(N);
-        visited[N] = true;
+        final int MAX = 100000;
+        int[] dist = new int[MAX + 1]; //dist[x] = 시작점N에서 x까지의 최소 이동 시간
+        Arrays.fill(dist, -1);  // -1은 방문 아직 안 함.
+
+        ArrayDeque<Integer> q = new ArrayDeque<>();
+        q.add(N);
+        dist[N] = 0;
 
         while (!q.isEmpty()) {
-            int size = q.size();
-            for (int i = 0; i < size; i++) {
-                int cur = q.poll();
-                if (cur == K) {
-                    System.out.print(depth);
-                    return;
-                }
-                int[] nexts = {cur - 1, cur + 1, cur * 2};
-                for (int nx : nexts) {
-                    if (0 <= nx && nx <= MAX && !visited[nx]) {
-                        visited[nx] = true;
-                        q.add(nx);
-                    }
+            int cur = q.poll();
+            if (cur == K) break; // brother 찾으면 종료
+
+            int[] nexts = {cur - 1, cur + 1, cur * 2};
+            for (int nx : nexts) {
+                if (0 <= nx && nx <= MAX && dist[nx] == -1) {
+                    dist[nx] = dist[cur] + 1;
+                    q.add(nx);
                 }
             }
-            depth++;
-            //큐에서 꺼내고, 찾는 값 아니면 아래층으로 이동. depth ++
         }
+        System.out.println(dist[K]);
     }
 }
