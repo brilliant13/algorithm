@@ -1,4 +1,4 @@
-# [Gold V] 강의실 배정 - 11000 
+# [Gold IV] 강의실 배정 - 11000 
 
 [문제 링크](https://www.acmicpc.net/problem/11000) 
 
