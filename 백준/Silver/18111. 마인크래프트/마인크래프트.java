@@ -34,7 +34,7 @@ public class Main {
 
 //        Map<Integer, Integer> timeBox = new HashMap<>();
 
-        for (int h = 0; h <= 256; h++) { //BruteForce
+        for (int h = minH; h <= maxH; h++) { //BruteForce
             long remove =0, add =0;
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
@@ -53,7 +53,7 @@ public class Main {
         }
 
         System.out.println(bestTime + " " + bestH);
-        
+
 
     }
 }
