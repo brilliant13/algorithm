@@ -22,9 +22,11 @@ public class Main {
         int[] dy = {0, 0, -1, 1};
 
         for (int i = 0; i < N; i++) {
-            String[] strs = br.readLine().split("");
+//            String[] strs = br.readLine().split("");
+            String line = br.readLine();
             for (int j = 0; j < M; j++) {
-                char c = strs[j].charAt(0);
+//                char c = strs[j].charAt(0);
+                char c = line.charAt(j);
                 map[i][j] = c;
                 if (c == 'I') {
                     q.offer(new int[]{i, j});
@@ -40,23 +42,14 @@ public class Main {
                 int nx = x + dx[d];
                 int ny = y + dy[d];
                 if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
-                if (!visited[nx][ny] && map[nx][ny] == 'O') {
-                    q.offer(new int[]{nx, ny});
-                    visited[nx][ny] = true;
-                } else if (!visited[nx][ny] && map[nx][ny] == 'P') {
-                    friends++;
-                    q.offer(new int[]{nx, ny});
-                    visited[nx][ny] = true;
-                }
+                if(visited[nx][ny]) continue;
+                if(map[nx][ny]=='X') continue;
+
+                if(map[nx][ny] =='P') friends++;
+                visited[nx][ny] = true;
+                q.offer(new int[]{nx, ny});
             }
         }
-        if (friends == 0) {
-            System.out.print("TT");
-        } else {
-            System.out.println(friends);
-
-        }
-
-
+        System.out.println(friends==0? "TT" : friends);
     }
 }
