@@ -7,38 +7,31 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        //a=97,z=122 A=65,Z=90 알파벳26개
         int count =0;
 
         for (int i = 0; i < N; i++) {
-            String str = br.readLine(); //happt
-            boolean[] alpha = new boolean[26]; //0~26. 0-based
-            boolean flag = true;
+            String str = br.readLine();
 
-            char cur = str.charAt(0);
-            alpha[cur-'a'] = true;
+            boolean[] seen = new boolean[26]; //0~26. 0-based
+            char previous = '\0';
+            boolean isGroup = true;
 
-            for (int j = 1; j < str.length(); j++) {
-                //문자 'h' -> 'h'-'a' = 해당 인덱스
-                char next = str.charAt(j);
-                int idx = next - 'a';
 
-                //이전 숫자랑 같다면
-                if (cur == next) {
-                    continue;
-                }
-                //이전 숫자랑 다르다면
-                else {
-                    if (alpha[idx]) {
-                        flag = false;
+            for (int j = 0; j < str.length(); j++) {
+                char cur = str.charAt(j);
+                if (cur != previous) {
+                    //문자가 바뀌는 순간에만 체크
+                    int idx = cur - 'a';
+                    if (seen[idx]) {//예전에 나왔던 문자가 다시 등장 -> 그룹 단어 아님
+                        isGroup=false;
                         break;
-                    } else {
-                        alpha[idx]=true;
                     }
+                    seen[idx] = true; //첫 등장 마킹
+                    previous = cur; //현재 문자를 이전 문자로 업데이트
                 }
-                cur = next;
+                //같으면(연속 중이면) 그냥 진행
             }
-            if(flag) count++;
+            if(isGroup) count++;
         }
         System.out.print(count);
     }
