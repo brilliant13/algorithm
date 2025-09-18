@@ -1,102 +1,63 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int M = Integer.parseInt(st.nextToken()); //가로
-        int N = Integer.parseInt(st.nextToken()); //세로
-        int H = Integer.parseInt(st.nextToken()); //높이
+        int M = Integer.parseInt(st.nextToken()); // 가로 (y)
+        int N = Integer.parseInt(st.nextToken()); // 세로 (x)
+        int H = Integer.parseInt(st.nextToken()); // 높이 (z)
 
-        int[][][] tomatoes = new int[N][M][H]; //0-based
-        boolean[][][] visited = new boolean[N][M][H]; //0-based
-
+        // tomatoes[x][y][z]: -1(빈칸), 0(안익음), 1(처음부터 익음), 2..(익은 날+1)
+        int[][][] tomatoes = new int[N][M][H];
         Queue<int[]> q = new ArrayDeque<>();
 
-        //모든 토마토가 익어있는 상태 구분
-        boolean alreadyRipen = true;
-
-        for (int i = 0; i < H; i++) {
-            for (int j = 0; j < N; j++) {
+        // 입력 & 초기 큐 적재(익은 토마토들)
+        for (int z = 0; z < H; z++) {
+            for (int x = 0; x < N; x++) {
                 st = new StringTokenizer(br.readLine());
-                for (int k = 0; k < M; k++) {
-                    int tomato = Integer.parseInt(st.nextToken());
-                    tomatoes[j][k][i] = tomato;
-                    if(tomato==0) alreadyRipen = false;
-                    if (tomato == 1) {
-                        visited[j][k][i] = true;
-                        q.offer(new int[]{j, k, i}); //enqueue시 방문처리
-                    }
+                for (int y = 0; y < M; y++) {
+                    int t = Integer.parseInt(st.nextToken());
+                    tomatoes[x][y][z] = t;
+                    if (t == 1) q.offer(new int[]{x, y, z}); // 1은 그대로 두고 시작
                 }
             }
         }
-
-        //저장될 때부터 모든 토마토가 익어있는 상태
-        if (alreadyRipen) {
-            System.out.println(0);
-            return;
-        }
-
-        //위, 아래, 왼쪽, 오른쪽, 앞, 뒤 여섯 방향에 있는 토마토
-        int day = 0;
 
         int[] dx = {-1, 1, 0, 0, 0, 0};
         int[] dy = {0, 0, -1, 1, 0, 0};
         int[] dz = {0, 0, 0, 0, -1, 1};
 
-        //q-size말고 다른 풀이 있나
+        // BFS: 0(안 익음)만 전파하여 현재값+1로 기록
         while (!q.isEmpty()) {
-            boolean ripen=false;
-            int size = q.size();
+            int[] cur = q.poll();
+            int x = cur[0], y = cur[1], z = cur[2];
 
-            for (int i = 0; i < size; i++) {
-                int[] cur = q.poll(); //tomatoes[N][M][H]
-                int x = cur[0], y = cur[1], z = cur[2];
-                for (int d = 0; d < 6; d++) {
-                    int nx = x + dx[d], ny = y + dy[d], nz = z + dz[d];
-                    if(nx<0 ||nx>=N || ny<0 || ny>=M || nz<0||nz>=H) continue;
-                    if (visited[nx][ny][nz]) continue;
-                    if (tomatoes[nx][ny][nz] == 0) {
-                        visited[nx][ny][nz]=true;
-                        q.offer(new int[]{nx, ny, nz});
-                        tomatoes[nx][ny][nz] = 1;
-                        ripen = true;
-                    }
-                }
+            for (int d = 0; d < 6; d++) {
+                int nx = x + dx[d], ny = y + dy[d], nz = z + dz[d];
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M || nz < 0 || nz >= H) continue;
+                if (tomatoes[nx][ny][nz] != 0) continue;          // 0만 익힐 수 있음
+
+                tomatoes[nx][ny][nz] = tomatoes[x][y][z] + 1;      // 날짜(거리) 누적
+                q.offer(new int[]{nx, ny, nz});
             }
-            if(ripen) day++;
         }
-//        for (int i = 0; i < H; i++) {
-//            for (int[][] arr : tomatoes) {
-//                for (int[] row : arr) {
-//                    for (int val : row) {
-//                        System.out.print(val+" ");
-//                    }
-//                }
-//                System.out.println();
-//            }
-//        }
 
-        for (int i = 0; i < H; i++) {
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < M; k++) {
-                    int cur = tomatoes[j][k][i];
-                    if (cur == 0) {
+        // 결과 계산: 0 남아있으면 -1, 아니면 (최대값 - 1)
+        int max = 1;
+        for (int z = 0; z < H; z++) {
+            for (int x = 0; x < N; x++) {
+                for (int y = 0; y < M; y++) {
+                    int v = tomatoes[x][y][z];
+                    if (v == 0) { // 끝까지 안 익은 칸 존재
                         System.out.println(-1);
                         return;
                     }
+                    if (v > max) max = v;
                 }
             }
         }
-        System.out.println(day);
-
-
-
+        System.out.println(max - 1); // 총 소요일
     }
-
 }
