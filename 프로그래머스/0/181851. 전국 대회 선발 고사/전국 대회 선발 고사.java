@@ -1,27 +1,13 @@
-import java.util.HashMap;
-
+import java.util.Comparator;
+import java.util.stream.IntStream;
 class Solution {
     public int solution(int[] rank, boolean[] attendance) {
-        //0~n-1번까지 학생 중 -> 3명 선발
-        int[] result = new int[3];
-        int count = 0;
-        int last = 1;
-        
-        HashMap<Integer,Integer> map = new HashMap<>();
-        
-        for(int i=0; i<rank.length; i++){
-            map.put(rank[i],i);
-        }
-        for(int i=1; i<=rank.length; i++){
-            int student = map.get(i);
-            if(attendance[student]){
-                result[count] = student;
-                count++;
-            }
-            if(count==3) break;
-        }
-        
-        int answer = 10000*result[0] + 100*result[1]+ result[2];
-        return answer;
+        return IntStream.range(0, rank.length)
+            .filter(i -> attendance[i])
+            .boxed() //? IntStream -> Stream<Integer>인가?
+            .sorted(Comparator.comparing(i->rank[i]))//rank[i]값 비교해서 오름차순으로 정수정렬
+            .limit(3L)//L은 뭐지
+            .reduce((current,next)->current*100 +next)
+            .get();
     }
 }
