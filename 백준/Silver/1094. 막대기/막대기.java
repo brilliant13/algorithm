@@ -6,10 +6,15 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        //X의 이진표현. 비트카운트. 비트마스크
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int X = Integer.parseInt(br.readLine());
-        System.out.println(Integer.bitCount(X));
+        int count = 0;
+        while (X > 0) {
+            if((X & 1) !=0) count++;
+            //cnt +=(X&1);
+            X>>=1;
+        }
+        System.out.println(count);
 
     }
 }
