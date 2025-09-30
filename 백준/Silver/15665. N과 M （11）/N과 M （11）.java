@@ -21,15 +21,37 @@ public class Main {
         seq = new int[M]; //0..M-1
 
         st = new StringTokenizer(br.readLine());
-        Set<Integer> set = new HashSet<>();
-        for (int i = 0; i < N; i++) {
-            set.add(Integer.parseInt(st.nextToken()));
-        }
-        //Set<Integer> -> Stream<Integer> -> IntStream -> int[]
-        // 1 7 9 9 -> 1 7 9
-        list = set.stream().mapToInt(Integer::intValue).toArray();
+
+        list = new int[N];
+        for (int i = 0; i < N; i++) list[i] = Integer.parseInt(st.nextToken());
+        // 9 1 7 9
         Arrays.sort(list);
-        N = list.length;
+        // 1 7 9 9
+
+        //in-place unique
+        int k = 0;
+        for (int i = 0; i < N; i++) {
+            if(i==0 || list[i] != list[i-1]) list[k++] = list[i];
+        }
+        N = k; //k는 중복되지 않는 원소 수
+//        for (int i = 0; i < list.length; i++) {
+//            System.out.println(list[i]);
+//        }
+//        System.out.println("k개 복사 후 ========= ");
+
+        list = Arrays.copyOf(list, k);
+
+//        for (int i = 0; i < list.length; i++) {
+//            System.out.println(list[i]);
+//        }
+
+
+
+
+
+        //int[] -> IntStream -> 중복삭제, 정렬 -> int[]
+//        list = Arrays.stream(list).distinct().sorted().toArray();
+//        N = list.length;
 
         dfs(0);
         System.out.print(sb);
