@@ -23,31 +23,26 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) list[i] = Integer.parseInt(st.nextToken());
         //9 7 9 1
-        //int[] -> IntStream -> 중복제거,정렬 -> int[]
-        //1 7 9
-        list = Arrays.stream(Main.list).distinct().sorted().toArray();
-        N = list.length;
-        dfs(0);
+        Arrays.sort(list);
+        //1 7 9 9
+//        N = list.length;
+        dfs(0,0);
         System.out.print(sb);
     }
 
-    static void dfs(int depth) {
+    static void dfs(int depth, int start) {
         if (depth == M) { // 중복된 값이 입력으로 들어올 수 있는 비내림차순 중복순열
             for (int i = 0; i < M; i++) {
                 sb.append(seq[i]).append((i + 1 == M) ? '\n' : ' ');
             }
             return;
         }
-        int start = 0;
-        for (int i = 0; i < N; i++) {
-            if (depth!=0 && seq[depth - 1] == list[i]) {
-                start = i;
-            }
-        }
-
+        int last = Integer.MIN_VALUE; //깊이 마다 last값 기록. 해당 깊이에서 이전값 중복되게 안뽑도록
         for (int i = start; i < N; i++) {
+            if(last == list[i]) continue;
             seq[depth] = list[i];
-            dfs(depth + 1);
+            last = list[i];
+            dfs(depth + 1, i );
         }
     }
 }
