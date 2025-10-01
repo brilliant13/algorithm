@@ -3,52 +3,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    static int N, count;
-    static int[][] map;
+    static int N;
+    static long count;
+    static int MASK; //하위 N비트 1
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        map = new int[N][N];
-        count = 0;
-        dfs(0);
+        MASK = (1<<N) -1; //하위 N비트가 전부 1
+        dfs(0,0,0,0); //cols, diag1, diag2, row
         System.out.print(count);
     }
 
-    static void dfs(int depth) {
-        if (depth == N) { //N행 모두 배치완료
+    // cols: 사용 중인 열, diag1: ↙↗ 대각(다음행에서 <<1), diag2: ↘↖ 대각(다음행에서 >>1)
+    static void dfs(int cols, int diag1, int diag2, int row) {
+        if (row == N) { //N행 모두 배치 완료
             count++;
             return;
         }
 
-        for (int c = 0; c < N; c++) {
-            if (map[depth][c] > 0) continue; //막힌 칸이면 패스
-            place(depth, c);
-            dfs(depth + 1);
-            remove(depth, c);
+        int available = ~(cols | diag1 | diag2) & MASK; //이번 행에서 가능한 자리들
+
+        while (available != 0) {
+            int p = available & -available; //최하위 1비트만 선택
+            available -= p; //해당 자리 제거
+
+            dfs(cols | p, (diag1 | p) << 1 & MASK, (diag2 | p) >> 1, row + 1);
+            // & MASK: 왼쪽 시프트 후 상위 비트 잘라내기 (안전)
         }
     }
-
-    static void place(int depth, int c) {
-        //현재 칸: 퀸 표시(+1)
-        map[depth][c]++;
-
-        //같은 열(아래쪽만)
-        for(int x = depth+1; x<N; x++) map[x][c]++;
-
-        //대각선 오른쪽아래
-        for (int x = depth + 1, y = c + 1; x < N && y < N; x++, y++) map[x][y]++;
-
-        //대각선 왼쪽아래
-        for (int x = depth + 1, y = c - 1; x < N && y >= 0; x++, y--) map[x][y]++;
-    }
-
-    static void remove(int depth, int c) {
-        //되돌리기(배치의 정확한 역연산). 백트랙킹
-        map[depth][c]--;
-        for(int x = depth+1; x<N; x++) map[x][c]--;
-        for (int x = depth + 1, y = c + 1; x < N && y < N; x++, y++) map[x][y]--;
-        for (int x = depth + 1, y = c - 1; x < N && y >= 0; x++, y--) map[x][y]--;
-    }
-
 }
