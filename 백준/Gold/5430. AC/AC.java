@@ -55,15 +55,21 @@ public class Main {
                 reverse = !reverse;
             }
             if (ch == 'D') {
-                if (dq.isEmpty()) {
+//                if (dq.isEmpty()) {
+//                    sb.append("error").append('\n');
+//                    return;
+//                }
+                Integer x = reverse ? dq.pollLast() : dq.pollFirst();
+                if (x == null) {
                     sb.append("error").append('\n');
                     return;
                 }
-                if (reverse) {
-                    dq.removeLast(); //없으면 예외
-                } else {
-                    dq.removeFirst();
-                }
+                
+//                if (reverse) {
+//                    dq.removeLast(); //없으면 예외
+//                } else {
+//                    dq.removeFirst();
+//                }
             }
         }
         int size = dq.size();
