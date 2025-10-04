@@ -11,85 +11,80 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
-        //R은 배열을 뒤집는다. D는 배열의 첫 번째 수를 버린다.
-        //배열이 비어있는데 D를하면 error
+
         while (T-- > 0) {
-            String p = br.readLine();
-            int n = Integer.parseInt(br.readLine());
-            String arr = br.readLine();
-            ac(p, n, arr);
-        }
-        System.out.println(sb);
-    }
+            //RDD
+            //4
+            //[1,2,3,4]
+            String p = br.readLine().trim();
+            int n = Integer.parseInt(br.readLine().trim());
+            String arr = br.readLine().trim();
 
-    private static void ac(String p, int n, String arr) {
-        //p = RDD, n = 4, arr = [1,2,3,4]  arr = [12,24,33344,12323]
-        boolean reverse = false;
-        Deque<Integer> dq = new ArrayDeque<>();
+            Deque<Integer> dq = parseArrayFast(arr, n);
+            boolean rev = false;
+            boolean error = false;
 
-        String nums = "";
-
-        if (n == 0) {
-            nums = "[]";
-        } else {
-            nums = arr.substring(1, arr.length() - 1);
-        }
-        String[] numList = nums.split(",");
-
-//        for (String s : numList) {
-//            System.out.println("numList = "+s);
-//        }
-//        System.out.println();
-
-
-        if (n != 0) {
-            for (String num : numList) {
-                dq.offer(Integer.parseInt(num));
-            }
-        }
-
-
-        for (int j = 0; j < p.length(); j++) {
-            char ch = p.charAt(j);
-            if (ch == 'R') {
-                reverse = !reverse;
-            }
-            if (ch == 'D') {
-//                if (dq.isEmpty()) {
-//                    sb.append("error").append('\n');
-//                    return;
-//                }
-                Integer x = reverse ? dq.pollLast() : dq.pollFirst();
-                if (x == null) {
-                    sb.append("error").append('\n');
-                    return;
+            for (int i = 0; i < p.length(); i++) {
+                char c = p.charAt(i);
+                if (c == 'R') {
+                    rev = !rev;
+                } else { //'D'
+                    Integer removed = rev ? dq.pollLast() : dq.pollFirst();
+                    if (removed == null) {//빈 덱에서 삭제 시도
+                        error = true;
+                        break;
+                    }
                 }
-                
-//                if (reverse) {
-//                    dq.removeLast(); //없으면 예외
-//                } else {
-//                    dq.removeFirst();
-//                }
             }
-        }
-        int size = dq.size();
-        if (size == 0) {
-            sb.append("[]").append('\n');
-            return;
-        }
-        if (reverse) {
-            sb.append('[');
-            while (!dq.isEmpty()) {
-                sb.append(dq.pollLast()).append(dq.isEmpty() ? "" : ',');
-            }
-            sb.append(']').append('\n');
-        } else {
-            sb.append('[');
-            while (!dq.isEmpty()) {
-                sb.append(dq.pollFirst()).append(dq.isEmpty() ? "" : ',');
-            }
-            sb.append(']').append('\n');
-        }
 
+            if (error) {
+                sb.append("error\n");
+            } else {
+                printDeque(dq, rev);
+            }
+        }
+        System.out.print(sb);
     }
+
+    //정규식 split 없이 직접 숫자 파싱: 공백/두자리/세자리 모두 안전
+    private static Deque<Integer> parseArrayFast(String arr, int n) {
+        Deque<Integer> dq = new ArrayDeque<>(n);
+        if(n==0) return dq; //"[]"
+
+        int len = arr.length();
+        int num = 0;
+        boolean inNumber = false;
+
+        // arr: "[1,2,33]" 형태. 숫자만 모아 int로 반환
+        for (int i = 0; i < len - 1; i++) {//양 끝 대괄호 제외
+            char ch = arr.charAt(i);
+            if (ch >= '0' && ch <= '9') {
+                inNumber = true;
+                num = num * 10 + (ch - '0');
+            } else{
+                if(inNumber){//숫자 종료 시점(콤마/공백/끝)
+                    dq.offer(num);
+                    num = 0;
+                    inNumber = false;
+                }
+            }
+        }
+        if(inNumber) dq.offer(num); //마지막 숫자처리
+        return dq;
+    }
+
+    private static void printDeque(Deque<Integer> dq, boolean rev) {
+        sb.append('[');
+        if (!dq.isEmpty()) {
+            if (!rev) {
+                sb.append(dq.pollFirst());
+                while (!dq.isEmpty()) sb.append(',').append(dq.pollFirst());
+            } else {
+                sb.append(dq.pollLast());
+                while(!dq.isEmpty()) sb.append(',').append(dq.pollLast());
+            }
+        }
+        sb.append("]\n");
+    }
+
 }
