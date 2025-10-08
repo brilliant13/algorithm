@@ -57,21 +57,16 @@ class Solution {
         
         //점수 차이가 같으면 "낮은 점수 화살을 더 많이 쏜 해답" 선택
         else if(diff==bestDiff){
-            if(betterLowScoreHeavier(cand, best)){
-                best = cand.clone();
+            for(int i=10; i>=0; i--){
+                if(cand[i]==best[i])continue;
+                if(cand[i]>best[i]){
+                    best = cand.clone();
+                }
+                return;
             }
+
         }
     }
     
-    //타이브레이커 비교
-    //낮은 점수(0점부터) 더 많이 맞힌 해답을 선택
-    //배열을 뒤에서부터 (인덱스 10 -> 0) 비교
-    boolean betterLowScoreHeavier(int[] cand, int[] curBest){
-        for(int i=10; i>0; i--){
-            if(cand[i] !=curBest[i]){
-                return cand[i] > curBest[i];
-            }
-        }
-        return false; //완전히 동일
-    }
+
 }
