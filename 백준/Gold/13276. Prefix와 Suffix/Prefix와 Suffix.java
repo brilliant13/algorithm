@@ -100,18 +100,16 @@ public class Main {
         Set<String> set = new HashSet<>();
 
         for (int i = 0; i < n; i++) {
-            if(!startA[i]) continue;
-            for (int j = i; j < n; j++) {
-                if(!endB[j]) continue;
-                if(j >= i + Math.max(aLen, bLen) - 1){
-                    set.add(S.substring(i, j + 1));
-                }
+            if (!startA[i]) continue;
+            int minJ = i + Math.max(aLen, bLen) - 1;
+            if (minJ >= n) continue;
+            //바로 하한에서 시작
+            for (int j = minJ; j < n; j++) {
+                if (endB[j]) set.add(S.substring(i, j + 1));
             }
         }
 
         System.out.print(set.size());
-
-
 
 
     }
