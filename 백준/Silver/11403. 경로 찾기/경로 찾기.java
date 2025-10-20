@@ -1,74 +1,39 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N;
-    static int[][] adj;
-    static int[][] ans;
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        adj = new int[N][N];
-        ans = new int[N][N];
+        StringBuilder sb = new StringBuilder();
 
-        //인접행렬 채우기
+        int N = Integer.parseInt(br.readLine().trim());
+        int[][] g = new int[N][N];
+
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                adj[i][j] = Integer.parseInt(st.nextToken());
+                g[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        //각 정점 s에서 DFS 한번씩
-        for (int i = 0; i < N; i++) {
-            boolean[] visited = new boolean[N]; //0..N-1 행별 방문기록
-            dfs(i,i,visited);
+        // Warshall: 경로 존재 여부 전파
+        for (int k = 0; k < N; k++) {
+            for (int i = 0; i < N; i++) {
+                if (g[i][k] == 0) continue; // 미세 최적화
+                for (int j = 0; j < N; j++) {
+                    if (g[k][j] == 1) g[i][j] = 1;
+                }
+            }
         }
 
-        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                sb.append(ans[i][j]);
-                if(j+1 < N) sb.append(' ');
+                sb.append(g[i][j]);
+                if (j + 1 < N) sb.append(' ');
             }
             sb.append('\n');
         }
-        System.out.println(sb);
 
-    }
-
-    static void dfs(int start, int cur, boolean[] visited) {
-        for(int nxt = 0; nxt<N; nxt++){
-            if(adj[cur][nxt] == 1 && !visited[nxt]){
-                visited[nxt] = true;
-                ans[start][nxt] = 1;
-                dfs(start,nxt,visited);
-            }
-        }
+        System.out.print(sb.toString());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
