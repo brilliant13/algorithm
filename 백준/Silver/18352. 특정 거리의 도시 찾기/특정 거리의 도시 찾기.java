@@ -28,30 +28,43 @@ public class Main {
             adj[u].add(v);
         }
         bfs(adj, K, X);
-        System.out.print(sb.length()==0 ? -1 : sb);
+        System.out.print(sb.length()==0? -1 : sb);
     }
 
     static void bfs(ArrayList<Integer>[] adj, int K, int X) {
         int N = adj.length-1;
-        int[] dist = new int[N + 1];
-        Arrays.fill(dist, -1); //방문 처리 용도. 방문 하지 않은 경우 거리 : -1
-
         Queue<Integer> q = new ArrayDeque<>();
-        dist[X] = 0;
+        List<Integer> ans = new ArrayList<>();
+        boolean[] vis = new boolean[N + 1];
         q.offer(X);
+        vis[X] = true;
+
+        int depth = 0;
 
         while (!q.isEmpty()) {
-            int u = q.poll();
-            for (int v : adj[u]) {
-                if(dist[v] != -1) continue;
-                dist[v] = dist[u] + 1;
-                q.offer(v);
+            int sz = q.size();
+            if (depth == K) {
+                while(sz-- >0) ans.add(q.poll());
+                break;
             }
+            while (sz-- > 0) {
+                int u = q.poll();
+                for (int v : adj[u]) {
+                    if(vis[v]) continue;
+                    vis[v] = true;
+                    q.offer(v);
+                }
+            }
+            depth++;
         }
 
-        for (int i = 1; i <= N; i++) {
-            if(dist[i] == K) sb.append(i).append('\n');
+        if (ans.isEmpty()) {
+            sb.append(-1);
+            return;
         }
+
+        Collections.sort(ans);
+        for(int v : ans) sb.append(v).append('\n');
     }
 }
 
