@@ -2,72 +2,76 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
+
         int T = Integer.parseInt(br.readLine());
+
         while (T-- > 0) {
-            st = new StringTokenizer(br.readLine());
+            StringTokenizer st = new StringTokenizer(br.readLine());
             int A = Integer.parseInt(st.nextToken());
             int B = Integer.parseInt(st.nextToken());
 
-            //HashMap + BFS로 경로 구ㅐ서 바로 출력
             sb.append(bfs(A, B)).append('\n');
         }
         System.out.print(sb);
     }
 
-    //HashMap을 이용한 BFS
-    static String bfs(int A, int B) {
-        Queue<Integer> q = new ArrayDeque<>();
-        HashMap<Integer, String> map = new HashMap<>(); //상태 -> 연산 문자열
+    static String bfs(int start, int target) {
+        //A,B 모두 0이상 10,000미만이다. 즉 만가지의 상태를 저장할 변수를 선언하고 활용한다.
+        boolean[] visited = new boolean[10000];
+        int[] prev = new int[10000]; //이전 상태 저장용
+        char[] how = new char[10000]; //어떤 연산으로 왔는지
 
-        q.add(A);
-        map.put(A, ""); //시작 상태까지의 연산은 없음
+        Queue<Integer> q = new ArrayDeque<>();
+        q.add(start);
+        visited[start] = true;
+        prev[start] = -1; //시작점 표시
 
         while (!q.isEmpty()) {
             int cur = q.poll();
-            String curPath = map.get(cur);
+            if (cur == target) break;
 
-            //목표 숫자에 도달하면 그 순간의 문자열이 최단 경로
-            if (cur==B) return curPath;
+            //D,S,L,R 순서대로
+            int[] nexts = {
+                    D(cur),
+                    S(cur),
+                    L(cur),
+                    R(cur)
+            };
+            //현재 Level에서 다음 Level로 4가지 갈래로 뻣어나감
+            char[] ops = {'D', 'S', 'L', 'R'};
 
-            //4가지 연산
-            int d = D(cur);
-            int s = S(cur);
-            int l = L(cur);
-            int r = R(cur);
+            for (int i = 0; i < 4; i++) {
+                int nxt = nexts[i];
+                if (!visited[nxt]) { //한번 방문한 건 재방문 안 함. 재방문 한다는 건 같은 level 또는 다음 level이라 최단거리에 영향 안 준다. 즉, 볼필요없다.
+                    //처음 나오는 놈이 최단거리라고 생각해도 됨.
 
-            //D
-            if (!map.containsKey(d)) {
-                map.put(d, curPath + "D");
-                q.add(d);
-            }
-            //S
-            if (!map.containsKey(s)) {
-                map.put(s, curPath + "S");
-                q.add(s);
-            }
-            //L
-            if (!map.containsKey(l)) {
-                map.put(l, curPath + "L");
-                q.add(l);
-            }
-            //R
-            if (!map.containsKey(r)) {
-                map.put(r, curPath + "R");
-                q.add(r);
+                    visited[nxt] = true;
+                    prev[nxt] = cur; //이전 상태를 저장한다.
+                    how[nxt] = ops[i]; //이 연산 진행할 때 어떤 연산으로 진행되었는지 기록.
+                    q.add(nxt); //다음 Level로 가기 위해 큐에 offer()
+                }
             }
         }
-        return ""; //문제 조건상 여기 도달하지 않음. 형식맞추기용.
-    }
 
+        //target에서부터 역추적
+        StringBuilder sb = new StringBuilder();
+        int cur = target;
+        while (prev[cur] != -1) {
+            sb.append(how[cur]);
+            cur = prev[cur]; //이전 노드로 올라가면서 역추적
+        }
+
+        return sb.reverse().toString();
+
+    }
 
     static int D(int a) {
         return (2 * a) % 10000;
@@ -78,33 +82,10 @@ public class Main {
     }
 
     static int L(int a) {
-        //d1 d2 d3 d4 -> d2 d3 d4 d1
-        //'0' + int -> (char)캐스팅
-        // 문자열/char 안 쓰고 바로 숫자 연산으로 가능
-//        char d1 = (char) ('0' + (a / 1000));
-//        char d2 = (char) ('0' + (a % 1000) / 100);
-//        char d3 = (char) ('0' + (a % 100) / 10);
-//        char d4 = (char) ('0' + (a % 10));
-        return (a % 1000) * 10 + +a / 1000;
-
-        //char -> String
-//        String sequence = "" + d1 + d2 + d3 + d4;
-//        return Integer.parseInt(sequence);
+        return (a % 1000) * 10 + a / 1000;
     }
 
     static int R(int a) {
-        //d1 d2 d3 d4 -> d4 d1 d2 d3
-        //'0' + int -> (char)캐스팅
-//        char d1 = (char) ('0' + a / 1000);
-//        char d2 = (char) ('0' + (a % 1000) / 100);
-//        char d3 = (char) ('0' + (a % 100) / 10);
-//        char d4 = (char) ('0' + (a % 10));
-        return (a % 10) * 1000 + (a / 10);
-
-
-        //char -> String
-//        String sequence = "" + d4 + d1 + d2 + d3;
-//        return Integer.parseInt(sequence);
+        return (a / 10) + (a % 10) * 1000;
     }
-
 }
