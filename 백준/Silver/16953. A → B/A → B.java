@@ -1,64 +1,36 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-
-    static boolean[] visited;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int A = Integer.parseInt(st.nextToken());
-        int B = Integer.parseInt(st.nextToken());
+        long A = Long.parseLong(st.nextToken());
+        long B = Long.parseLong(st.nextToken());
 
-        visited = new boolean[1_000_000_001];// 1~10^9
+        int cnt = 0;
 
-        //A->B
-        //2를 곱한다
-        //1을 수의 가장 오른쪽에 추가한다
-        //A->B로 바꾸는데 필요한 연산의 최솟값을 구해보자.
-        //그냥 최단거리네. 그래프 최단거리 -> BFS
-        //최소레벨 세면서 찾으면 답내면 된다.
+        while (B > A) {
+            cnt++;
 
-        //입력값 10억이하
-        System.out.println(bfs(A, B));
-    }
-
-    static int bfs(int start, int end) {
-        Queue<Integer> q = new ArrayDeque<>();
-        q.offer(start);
-        visited[start] = true;
-        int count = 0;
-        boolean find = false;
-
-
-        while (!q.isEmpty()) {
-            int qsize = q.size();
-            count++;
-
-            for (int i = 0; i < qsize; i++) {
-                int cur = q.poll();
-                long first = cur*2L;
-                long second = cur*10L +1;
-
-                if (first == end || second ==end) {
-                    return count + 1;
-                }
-                if (first <= end && !visited[(int)first]) {
-                    visited[(int) first] = true;
-                    q.offer((int) first);
-                }
-                if (second <= end && !visited[(int) second]) {
-                    visited[(int) second] = true;
-                    q.offer((int) second);
-                }
+            if (B % 10 == 1) {           // 끝자리가 1이면 1 제거
+                B = (B - 1) / 10;
+            } else if (B % 2 == 0) {     // 짝수면 2로 나누기
+                B /= 2;
+            } else {                     // 둘 다 아니면 더 이상 A로 못 줄임
+                System.out.println(-1);
+                return;
             }
         }
-        return -1;
+
+        if (B == A) {
+            // 연산 횟수 + 1 출력
+            System.out.println(cnt + 1);
+        } else {
+            System.out.println(-1);
+        }
     }
 }
