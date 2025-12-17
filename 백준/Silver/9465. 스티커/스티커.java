@@ -31,13 +31,6 @@ public class Main {
             dp[0][1] = dp[1][0] + stickers[0][1];
             dp[1][1] = dp[0][0]+ stickers[1][1];
 
-            if (n == 2) {
-                sb.append(Math.max(dp[0][1], dp[1][1])).append('\n');
-                continue;
-            }
-
-
-
             for (int k = 2; k < n; k++) {
                 dp[0][k] = stickers[0][k] + Math.max(dp[1][k - 1], dp[1][k - 2]);
                 dp[1][k] = stickers[1][k] + Math.max(dp[0][k - 1], dp[0][k - 2]);
