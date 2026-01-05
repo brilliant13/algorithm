@@ -7,13 +7,17 @@ import java.util.StringTokenizer;
 //파이프 옮기기 1
 public class Main {
     static final int H =0, V=1, D = 2;
+    static int N;
+    static int[][] map;
+    static long[][][] memo;
+    static boolean[][][] vis;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
 
+        map = new int[N + 1][N + 1]; // 1-based
         StringTokenizer st;
-        int[][] map = new int[N + 1][N + 1]; // 1-based
         for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= N; j++) {
@@ -21,33 +25,48 @@ public class Main {
             }
         }
 
-        long[][][] dp = new long[N + 1][N + 1][3];
-        //파이프의 끝점(머리)를 (r,c)라고 한다.
-        dp[1][2][H] = 1; //시작: (1,1)~(1,2), 머리=(1,2), 가로
+        memo = new long[N + 1][N + 1][3];
+        vis = new boolean[N + 1][N + 1][3];
 
-        for (int r = 1; r <= N; r++) {
-            for (int c = 1; c <= N; c++) {
-                if(map[r][c]==1) continue; //벽이면 불가
+        //시작: (1,1)-(1,2) 머리=(1,2), 가로
+        long ans = dfs(1, 2, H);
+        System.out.println(ans);
 
-                //가로 도착: (r,c-1)에서 H 또는 D
-                if (c - 1 >= 1) {
-                    dp[r][c][H] += dp[r][c - 1][H] + dp[r][c - 1][D];
-                }
-
-                //세로 도착: (r-1,c)에서 V 또는 D
-                if (r - 1 >= 1) {
-                    dp[r][c][V] += dp[r-1][c][V] + dp[r-1][c][D];
-                }
-
-                //대각선 도착: (r-1,c-1)에서 H/V/D, 단 3칸이 모두 0
-                if (r - 1 >= 1 && c - 1 >= 1) {
-                    if(map[r-1][c] == 0 && map[r][c-1] ==0)
-                    dp[r][c][D] += dp[r - 1][c - 1][H] + dp[r - 1][c - 1][V] + dp[r - 1][c - 1][D];
-                }
-            }
-        }
-        long ans = dp[N][N][H] + dp[N][N][V] + dp[N][N][D];
-        System.out.print(ans);
     }
 
+    static long dfs(int r, int c, int dir) {
+        if(r==N && c ==N) return 1; //도착
+        if(vis[r][c][dir]) return memo[r][c][dir];
+        //방문 안했다면 방문처리
+        vis[r][c][dir] = true;
+
+        long res = 0;
+
+        //오른쪽 이동 (H 또는 D에서 가능) -> 다음 dir은 H
+        if (dir == H || dir == D) {
+            int nc = c + 1;
+            if (nc <= N && map[r][nc] == 0) {
+                res += dfs(r, nc, H);
+            }
+        }
+
+        //아래 이동 (V 또는 D에서 가능) -> 다음 dir은 V
+        if (dir == V || dir == D) {
+            int nr = r+1;
+            if (nr <= N && map[nr][c] == 0) {
+                res += dfs(nr, c, V);
+            }
+        }
+
+        //대각 이동 (모든 dir에서 가능) -> 다음 dir은 D
+        int nr = r + 1, nc = c + 1;
+        if (nr <= N && nc <= N) {
+            if (map[r][nc] == 0 && map[nr][c] == 0 && map[nr][nc] == 0) {
+                res += dfs(nr, nc, D);
+            }
+        }
+
+        memo[r][c][dir] = res;
+        return res;
+    }
 }
