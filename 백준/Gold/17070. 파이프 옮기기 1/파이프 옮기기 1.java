@@ -6,86 +6,48 @@ import java.util.StringTokenizer;
 
 //파이프 옮기기 1
 public class Main {
-    static int count = 0;
-    static int[][] map;
-    static int N;
+    static final int H =0, V=1, D = 2;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
+
         StringTokenizer st;
-        map = new int[N + 1][N + 1]; // 1-based
+        int[][] map = new int[N + 1][N + 1]; // 1-based
         for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= N; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        int[] before = {1, 1};
-        int[] current = {1, 2};
-        dfs(before, current);
-        System.out.print(count);
+
+        long[][][] dp = new long[N + 1][N + 1][3];
+        //파이프의 끝점(머리)를 (r,c)라고 한다.
+        dp[1][2][H] = 1; //시작: (1,1)~(1,2), 머리=(1,2), 가로
+
+        for (int r = 1; r <= N; r++) {
+            for (int c = 1; c <= N; c++) {
+                if(map[r][c]==1) continue; //벽이면 불가
+
+                //가로 도착: (r,c-1)에서 H 또는 D
+                if (c - 1 >= 1) {
+                    dp[r][c][H] += dp[r][c - 1][H] + dp[r][c - 1][D];
+                }
+
+                //세로 도착: (r-1,c)에서 V 또는 D
+                if (r - 1 >= 1) {
+                    dp[r][c][V] += dp[r-1][c][V] + dp[r-1][c][D];
+                }
+
+                //대각선 도착: (r-1,c-1)에서 H/V/D, 단 3칸이 모두 0
+                if (r - 1 >= 1 && c - 1 >= 1) {
+                    if(map[r-1][c] == 0 && map[r][c-1] ==0)
+                    dp[r][c][D] += dp[r - 1][c - 1][H] + dp[r - 1][c - 1][V] + dp[r - 1][c - 1][D];
+                }
+            }
+        }
+        long ans = dp[N][N][H] + dp[N][N][V] + dp[N][N][D];
+        System.out.print(ans);
     }
 
-    static void dfs(int[] before, int[] current) {
-
-        if (Arrays.equals(current, new int[]{N, N})) {
-            //도착
-            count++;
-            return;
-        }
-        int beforeR = before[0], beforeC = before[1];
-        int currentR = current[0], currentC = current[1];
-
-        //R행, C열로 봐야지. 수학좌표계에서의 (x,y)가아니라
-        //1.가로
-        if (beforeR == currentR && beforeC + 1 == currentC) {//x좌표 +1 이 현재 좌표인경우 = 가로.
-            //가로,대각 옵션 두 가지
-            //가로
-            if (currentC + 1 <= N && map[currentR][currentC + 1] != 1) {
-                dfs(current, new int[]{currentR, currentC + 1});
-            }
-            //대각
-            //오른쪽,아래,대각방향 모두 벽이 아니어야 함.
-            if (currentR + 1 <= N && currentC + 1 <= N &&
-                    map[currentR + 1][currentC + 1] != 1 && map[currentR + 1][currentC] != 1
-                    && map[currentR][currentC + 1] != 1) {
-                dfs(current, new int[]{currentR + 1, currentC + 1});
-            }
-        }
-
-        //2.세로
-        if (beforeR + 1 == currentR && beforeC == currentC) {//y좌표 +1 이 현재 좌표인경우 = 세로.
-            //세로, 대각 옵션 두 가지
-            //세로
-            if (currentR + 1 <= N && map[currentR+1][currentC] != 1) {
-                dfs(current, new int[]{currentR+1, currentC});
-            }
-            //대각
-            if (currentR + 1 <= N && currentC + 1 <= N &&
-                    map[currentR + 1][currentC + 1] != 1 && map[currentR + 1][currentC] != 1
-                    && map[currentR][currentC + 1] != 1) {
-                dfs(current, new int[]{currentR + 1, currentC + 1});
-            }
-        }
-        //3.대각
-        if (beforeR + 1 == currentR && beforeC + 1 == currentC) {//y좌표 +1 이 현재 좌표인경우, x좌표 +1이 현재 좌표인 경우 = 대각
-            //가로, 세로, 대각 옵션 세 가지
-
-            //가로
-            if (currentC + 1 <= N && map[currentR][currentC + 1] != 1) {
-                dfs(current, new int[]{currentR, currentC + 1});
-            }
-            //세로
-            if (currentR + 1 <= N && map[currentR+1][currentC] != 1) {
-                dfs(current, new int[]{currentR+1, currentC});
-            }
-            //대각
-            if (currentR + 1 <= N && currentC + 1 <= N &&
-                    map[currentR + 1][currentC + 1] != 1 && map[currentR + 1][currentC] != 1
-                    && map[currentR][currentC + 1] != 1) {
-                dfs(current, new int[]{currentR + 1, currentC + 1});
-            }
-        }
-    }
 }
