@@ -6,18 +6,18 @@ import java.util.*;
 public class Main {
 
     static class Edge {
-        int to,w;
+        int to, w;
+
         Edge(int to, int w) {
-            this.to =to;
+            this.to = to;
             this.w = w;
         }
     }
 
     static int n;
     static List<Edge>[] graph;
+    static int diameter = 0;
 
-    static int farNode;
-    static int farDist;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,42 +36,32 @@ public class Main {
             graph[u].add(new Edge(v, w));
             graph[v].add(new Edge(u, w));
         }
-
-        //1) 임의의 노드(1)에서 가장 먼 노드 A 찾기 (트리의 지름 위의 끝 점 후보는 A,B이다.)
-        dfsIter(1);
-        int A = farNode;
-        
-        //2) A에서 가장 먼 노드까지 거리 = 지름
-        //트리 지름 위에 있는 끝 점(끝 리프 노드)중의 하나인 A를 발견했다.
-        //A에서 최대거리에 있는 B가 바로 트리의 지름이다. B는 트리 지름 위에 있는 끝 점(끝 리프 노드)이다.
-        dfsIter(A);
-        System.out.print(farDist);
+        dfs(1, 0);              // 루트는 아무거나(1) 잡아도 됨
+        System.out.println(diameter);
     }
 
-    static void dfsIter(int start) {
-        boolean[] vis = new boolean[n + 1];//1..n
-        Deque<int[]> stack = new ArrayDeque<>();
-        stack.push(new int[]{start, 0});
-        vis[start] = true;
+    // 반환값: u에서 "아래로" 내려가는 최대 거리 (부모 방향은 제외)
+    static int dfs(int u, int parent) {
+        int best1 =0, best2=0; //자식 방향 후보 1등, 2등
 
-        farNode = start;
-        farDist = 0;
+        for (Edge e : graph[u]) {
+            int v = e.to;
+            if(v==parent) continue;
 
-        while (!stack.isEmpty()) {
-            int[] cur = stack.pop();
-            int x = cur[0], dist = cur[1];
-
-            if (dist > farDist) {
-                farDist = dist;
-                farNode = x;
+            int cand = dfs(v,u) + e.w; //u->v로 내려가는 경로 길이
+            if(cand > best1){
+                best2 = best1; // 1등이 밀려나서 2등이 됨
+                best1 = cand; // 새 후보가 1등
+            } else if(cand > best2){
+                best2 = cand; // 1등은 아니지만 2등은 됨
             }
 
-            for (Edge edge : graph[x]) {
-                if (!vis[edge.to]) {
-                    vis[edge.to] = true;
-                    stack.push(new int[]{edge.to, dist + edge.w});
-                }
-            }
         }
+
+        //u를 가운데로 하는 지름 후보
+        diameter = Math.max(diameter, best1 + best2);
+
+        //부모에게는 "한 갈래"만 올려줄 수 있음
+        return best1;
     }
 }
