@@ -60,43 +60,34 @@ public class Main {
             //N개의 시작점
             boolean myCycle = false;
 
-            out:
-            for (int p = 1; p <= N; p++) {
-                //거리배열 초기화
-                Arrays.fill(distance, INF);
-                //시작점 거리 = 0
-                distance[p] = 0;
-                boolean update = false;
+            //거리배열 초기화
+            Arrays.fill(distance, 0);
 
-                //다음 Round (N-1번 라운드까지 진행)
-                for (int i = 0; i < N; i++) {
-                    update = false;
-                    for (int k = 0; k < 2 * M + W; k++) {
-                        Edge edge = edges[k];
-                        // u->v
-                        if (distance[edge.start] != INF && distance[edge.end] > distance[edge.start] + edge.cost) {
-                            distance[edge.end] = distance[edge.start] + edge.cost;
-                            update = true;
-                        }
-                    }
-                    //갱신이 없다면 추가 갱신가능성이 없으니 pass
-                    if (!update) {
-                        continue out;
-                    }
-                }
-                //N-1라운드 후 음의 사이클 체크
+            //다음 Round (N-1번 라운드까지 진행)
+            for (int i = 1; i < N; i++) {
+                boolean updated = false;
                 for (int k = 0; k < 2 * M + W; k++) {
                     Edge edge = edges[k];
-                    //시작점에서 도달할 수 없는 정점은 pass하고,
-                    if (distance[edge.start] != INF && distance[edge.end] > distance[edge.start] + edge.cost) {
-                        myCycle = true;
-                        sb.append("YES").append('\n');
-                        break;
+                    // u->v
+                    if (distance[edge.end] > distance[edge.start] + edge.cost) {
+                        distance[edge.end] = distance[edge.start] + edge.cost;
+                        updated = true;
                     }
                 }
-                if (myCycle) break;
+                if (!updated) break;
             }
 
+            //N-1라운드 후 음의 사이클 체크
+            for (int k = 0; k < 2 * M + W; k++) {
+                Edge edge = edges[k];
+                //시작점에서 도달할 수 없는 정점은 pass하고,
+                if (distance[edge.end] > distance[edge.start] + edge.cost) {
+                    myCycle = true;
+                    sb.append("YES").append('\n');
+                    break;
+                }
+            }
+            if (myCycle) continue;
             if (!myCycle) sb.append("NO").append('\n');
         }
         System.out.print(sb);
