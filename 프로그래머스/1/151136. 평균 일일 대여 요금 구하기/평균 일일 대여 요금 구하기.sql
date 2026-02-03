@@ -1,4 +1,4 @@
--- 코드를 입력하세요
+
 SELECT ROUND(AVG(DAILY_FEE),0) as AVERAGE_FEE FROM CAR_RENTAL_COMPANY_CAR as a WHERE a.CAR_TYPE = 'SUV' group by a.CAR_TYPE;
 # 다음은 어느 자동차 대여 회사에서 대여중인 자동차들의 정보를 담은 CAR_RENTAL_COMPANY_CAR테이블이다.
 # 이 테이블은 CAR_ID, CAR_TYPE, DAILY_FEE, OPTIONS라는 속성으로 이루어져있다.
