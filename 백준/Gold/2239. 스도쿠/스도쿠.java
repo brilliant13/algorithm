@@ -1,46 +1,22 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
+
     static int[][] board = new int[9][9];
-
-    // used[0][r][num] = r행에 num 사용 여부
-    // used[1][c][num] = c열에 num 사용 여부
-    // used[2][b][num] = b박스에 num 사용 여부
-    static boolean[][][] used = new boolean[3][9][10];
-
+    static int[] rowMask = new int[9];
+    static int[] colMask = new int[9];
+    static int[] boxMask = new int[9];
     static List<int[]> empties = new ArrayList<>();
 
     static int boxIndex(int r, int c) {
-        return (r / 3) * 3 + (c / 3);
+        return (r / 3) * 3 + c / 3;
     }
 
-    // 정답 하나 찾으면 true 반환 (solved 플래그 없이 종료)
-    static boolean dfs(int idx) {
-        if (idx == empties.size()) return true; // 빈 칸 다 채움
-
-        int r = empties.get(idx)[0];
-        int c = empties.get(idx)[1];
-        int b = boxIndex(r, c);
-
-        for (int num = 1; num <= 9; num++) { // 1..9 순서 => 사전식 최소
-            if (used[0][r][num] || used[1][c][num] || used[2][b][num]) continue;
-
-            // 놓기
-            board[r][c] = num;
-            used[0][r][num] = used[1][c][num] = used[2][b][num] = true;
-
-            if (dfs(idx + 1)) return true; // 성공하면 즉시 전파
-
-            // 되돌리기(백트래킹)
-            board[r][c] = 0;
-            used[0][r][num] = used[1][c][num] = used[2][b][num] = false;
-        }
-
-        return false; // 이 칸에 어떤 숫자도 못 놓으면 실패
-    }
-
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         for (int i = 0; i < 9; i++) {
@@ -51,10 +27,11 @@ public class Main {
                 if (v == 0) {
                     empties.add(new int[]{i, j});
                 } else {
+                    int bit = 1 << (v - 1);
                     int b = boxIndex(i, j);
-                    used[0][i][v] = true;
-                    used[1][j][v] = true;
-                    used[2][b][v] = true;
+                    rowMask[i] |= bit;
+                    colMask[j] |= bit;
+                    boxMask[b] |= bit;
                 }
             }
         }
@@ -67,5 +44,38 @@ public class Main {
             sb.append('\n');
         }
         System.out.print(sb);
+
+    }
+
+    static boolean dfs(int idx) {
+        if (idx == empties.size()) {
+            return true;
+        }
+
+        int r = empties.get(idx)[0];
+        int c = empties.get(idx)[1];
+        int b = boxIndex(r, c);
+
+        int used = rowMask[r] | colMask[c] | boxMask[b];
+        int avail = (~used) & 0x1FF;
+
+        for (int num = 1; num <= 9; num++) {
+            int bit = 1 << (num - 1);
+            if((avail&bit)==0) continue;
+
+            board[r][c] = num;
+            rowMask[r] |= bit;
+            colMask[c] |= bit;
+            boxMask[b] |= bit;
+
+            //다음 후보군 삽입
+            if(dfs(idx + 1)) return true;
+
+            board[r][c] = 0;
+            rowMask[r] ^= bit;
+            colMask[c] ^= bit;
+            boxMask[b] ^= bit;
+        }
+        return false;
     }
 }
