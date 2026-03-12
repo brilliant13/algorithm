@@ -44,7 +44,7 @@ public class Main {
 
         // 진입차수가 0인 노드들을 큐에 넣는다.
         Queue<Integer> q = new ArrayDeque<>();
-        for (int i = 1; i <= N; i++) {
+        for (int i = N; i >= 1; i--) {
             if (indegree[i] == 0) {
                 q.offer(i);
             }
