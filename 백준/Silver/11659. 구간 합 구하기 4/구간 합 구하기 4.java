@@ -1,31 +1,40 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
-        //입력 수열 읽으면서 바로 prefix_sum 계산
-        long[] prefix = new long[N + 1];
+        int[] arr = new int[N];
+        int[] sums = new int[N];
+//        int sum = 0;
+
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            prefix[i] = prefix[i - 1] + Integer.parseInt(st.nextToken());
+
+        for (int i = 0; i < N; i++) {
+            int cur = Integer.parseInt(st.nextToken());
+            arr[i] = cur;
+            if(i==0) {
+                sums[0] = cur;
+                continue;
+            }
+            sums[i] += sums[i-1] + cur;
         }
 
+        // 구간합 = 합 배열로 O(N)이 아니라 O(1)로 처리
         StringBuilder sb = new StringBuilder();
-        for (int j = 0; j < M; j++) {
+        for (int k = 0; k < M; k++) {
             st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            sb.append(prefix[end] - prefix[start - 1]).append('\n');
+            int i = Integer.parseInt(st.nextToken());
+            int j = Integer.parseInt(st.nextToken());
+            sb.append(sums[j-1]-sums[i-1]+arr[i-1]);
+            if(k!=M) sb.append('\n');
         }
         System.out.print(sb);
-
-
     }
+
 }
