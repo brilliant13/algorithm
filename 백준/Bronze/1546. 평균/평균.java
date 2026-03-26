@@ -16,10 +16,11 @@ public class Main {
             if (arr[i] > max) max = arr[i];
         }
         for (int i = 0; i < N; i++) {
-            average += arr[i] / max * 100;
+//            average += arr[i] / max * 100;
+            average += arr[i];
         }
-        average /= N;
-        System.out.println(average);
+//        average /= N;
+        System.out.println(((average/max)*100)/N);
 
     }
 
