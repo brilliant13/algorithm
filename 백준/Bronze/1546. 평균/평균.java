@@ -1,28 +1,21 @@
+import java.util.*;
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int arr[] = new int[N];
-        double max = 0;
-        double average =0;
-
+        //int[] arr = new int[N];
+        int max = 0;
+        int sum = 0;
         for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-            if (arr[i] > max) max = arr[i];
+            int cur = Integer.parseInt(st.nextToken());
+            if(cur>max) max = cur;
+            sum+=cur;
         }
-        for (int i = 0; i < N; i++) {
-//            average += arr[i] / max * 100;
-            average += arr[i];
-        }
-//        average /= N;
-        System.out.println(((average/max)*100)/N);
-
+        System.out.print(sum*100.0/max/N);
+//        System.out.print((double)sum*100/max/3);
     }
-
 
 }
