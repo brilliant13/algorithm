@@ -1,25 +1,33 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
+
 public class Main {
-  public static void main(String[] args) throws IOException {
-    BufferedReader bufferedReader 
-      = new BufferedReader(new InputStreamReader(System.in));
-    StringTokenizer stringTokenizer 
-      = new StringTokenizer(bufferedReader.readLine());
-    int suNo = Integer.parseInt(stringTokenizer.nextToken());
-    int quizNo = Integer.parseInt(stringTokenizer.nextToken());
-    long[] S = new long[suNo + 1];
-    stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-    for (int i = 1; i <= suNo; i++) {
-      S[i] = S[i - 1] + Integer.parseInt(stringTokenizer.nextToken());
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int[] sums = new int[N+1];
+
+        st = new StringTokenizer(br.readLine());
+
+        for (int i = 1; i <= N; i++) {
+            int cur = Integer.parseInt(st.nextToken());
+            sums[i] += sums[i-1] + cur; //1-based면 sums[0]은 디폴트로 0
+        }
+
+        // 구간합 = 합 배열로 O(N)이 아니라 O(1)로 처리
+        StringBuilder sb = new StringBuilder();
+        for (int k = 0; k < M; k++) {
+            st = new StringTokenizer(br.readLine());
+            int i = Integer.parseInt(st.nextToken());
+            int j = Integer.parseInt(st.nextToken());
+            sb.append(sums[j]-sums[i-1]);
+            if(k!=M-1) sb.append('\n');
+        }
+        System.out.print(sb);
     }
-    for (int q = 0; q < quizNo; q++) {
-      stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-      int i = Integer.parseInt(stringTokenizer.nextToken());
-      int j = Integer.parseInt(stringTokenizer.nextToken());
-      System.out.println(S[j] - S[i - 1]);
-    }
-  }
+
 }
